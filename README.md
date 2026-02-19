@@ -1,24 +1,23 @@
 # AI Voice Agent (CPaaS)
-### Team: Barbie
-### Event: UDYAM'26 - DevBits
+### Team: <span style="color: #E21683;">Barbie</span>
+#### Event: UDYAM'26 - DevBits
+A contextual, low-latency AI receptionist and sales agent, capable of handling interruptions and generating Minutes of Meeting (MoM).
 
-> A contextual, low-latency AI receptionist and sales agent for Real Estate, capable of handling interruptions and generating Minutes of Meeting (MoM).
 
----
 
-## 📖 Overview
+## Overview
 This project is an **AI-Powered Customer Engagement Platform** designed to automate Inbound and Outbound calls for a real estate company ("Barbie Builders"). The system acts as a Smart Receptionist that qualifies leads, answers queries about properties (Apartments, Villas, Plots), and automatically generates a PDF summary of the conversation.
 
-### ✨ Key Features
-* [cite_start]**Contextual Intelligence:** Powered by **Gemini 2.5 Flash**, the agent understands location context (Noida/Gurgaon) and user intent[cite: 31, 43].
-* [cite_start]**Low Latency:** Uses streaming responses (Piper TTS + Gemini Streaming) to achieve conversational speeds < 2 seconds[cite: 121].
-* [cite_start]**Barge-In Support:** The agent stops speaking immediately if the user interrupts, mimicking natural human conversation.
-* [cite_start]**Automated MoM:** Generates a structured **Minutes of Meeting PDF** containing customer details, budget, and action items immediately after the call[cite: 50, 131].
+##  Key Features
+* **Contextual Intelligence:** Powered by **Gemini 2.5 Flash**, the agent understands location context and user intent.
+* **Low Latency:** Uses streaming responses (Piper TTS + Gemini Streaming) to achieve conversational speeds < 2 seconds.
+* **Barge-In Support:** The agent stops speaking immediately if the user interrupts, mimicking natural human conversation.
+* **Automated MoM:** Generates a structured **Minutes of Meeting PDF** containing customer details, budget, and action items immediately after the call.
 * **Full Duplex Audio:** Utilizes Asterisk External Media (RTP) for raw audio processing.
 
----
 
-## 🏗️ Architecture
+
+## Architecture
 
 **Data Flow:**
 1.  **Telephony:** Asterisk handles the SIP call.
@@ -30,20 +29,19 @@ This project is an **AI-Powered Customer Engagement Platform** designed to autom
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 | Component | Technology | Description |
 | :--- | :--- | :--- |
-| **LLM** | Google Gemini 2.5 Flash | Logic, conversation, and MoM generation |
 | **Telephony** | Asterisk (v18+) | SIP Server & ARI (Asterisk REST Interface) |
 | **STT** | Faster-Whisper | Low-latency speech-to-text |
-| **TTS** | Piper | Neural text-to-speech (running specifically `en_US-amy-medium`) |
 | **VAD** | Silero VAD | Voice Activity Detection for Barge-in |
-| **PDF Engine** | WeasyPrint | HTML to PDF conversion for MoM |
-| **Language** | Python 3.10+ | Core application logic |
+| **LLM** | Google Gemini 2.5 Flash | Logic, conversation, and MoM generation |
+| **TTS** | Piper | Neural text-to-speech|
+| **PDF Converter** | WeasyPrint | HTML to PDF conversion for MoM |
 
 ---
 
-## 🚀 Setup Instructions
+## Setup Instructions
 
 ### 1. Prerequisites
 * Python 3.10+ installed.
