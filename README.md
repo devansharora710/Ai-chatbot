@@ -28,12 +28,19 @@ Unlike standard IVR systems, this agent uses **LLM Streaming** and **VAD (Voice 
 
 The system follows a micro-service architecture orchestrated by Python.
 
-```mermaid
 graph TD
     User((User/Phone)) <-->|SIP/RTP| Asterisk[Asterisk Server]
-    Asterisk -- RTP Audio --> Whisper[Whisper Listener (STT)]
-    Whisper -- Text --> ARI[ARI Orchestrator]
-    ARI <-->|WebSocket| Asterisk
-    ARI -- Context/History --> Gemini[Gemini 2.5 Flash]
-    Gemini -- Text Stream --> Piper[Piper Worker (TTS)]
-    Piper -- RTP Audio --> Asterisk
+    
+    subgraph "AI Voice Pipeline"
+        Asterisk -- "Raw RTP (ulaw)" --> Whisper[Whisper Listener STT]
+        Whisper -- "JSON Transcript" --> ARI[ARI Orchestrator]
+        ARI <-->|WebSocket/REST| Asterisk
+        ARI -- "Prompt + History" --> Gemini[Gemini 2.5 Flash]
+        Gemini -- "Text Stream" --> Piper[Piper Worker TTS]
+        Piper -- "RTP Audio" --> Asterisk
+    end
+
+    subgraph "Post-Call Processing"
+        ARI -- "Full Transcript" --> Thinker[Gemini Thinker]
+        Thinker -- "Markdown" --> PDF[WeasyPrint PDF Generator]
+    end
