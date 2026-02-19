@@ -56,7 +56,12 @@ git clone https://github.com/devansharora710/Ai-chatbot
 cd Ai-chatbot
 pip install -r requirements.txt
 ```
+It is recommednded to run it inside a virtual environment
+```bash
 
+python3 -m venv venv
+source venv/bin/activate
+```
 
 
 ## Below is a video example of a sample call 
