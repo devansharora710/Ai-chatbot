@@ -1,5 +1,6 @@
 # AI Voice Agent (CPaaS)
 ### Team: ${\color{#E21683}Barbie}$
+### Team Members: Pratinav Gupta & Devansh Arora
 #### Event: UDYAM'26 - DevBits
 A contextual, low-latency AI receptionist and sales agent, capable of handling interruptions and generating Minutes of Meeting (MoM).
 
