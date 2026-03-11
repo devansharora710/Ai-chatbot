@@ -4,9 +4,12 @@ import asyncio
 from typing import AsyncGenerator, List, Dict, Optional
 from dotenv import load_dotenv
 import google.generativeai as genai
+from pathlib import Path
 
-load_dotenv("API_Key.env")
 
+BASE_DIR = Path(__file__).parent.parent
+ENV_PATH = BASE_DIR / "API_Key.env"
+load_dotenv(ENV_PATH)
 API_KEY = os.getenv("GEMINI_API_KEY")
 
 MODEL_NAME = "gemini-2.5-flash-lite"
@@ -153,11 +156,13 @@ async def get_ai_response_stream(user_text: str) -> AsyncGenerator[str, None]:
             _HISTORY.append(_mk_model_msg(final_text))
             _HISTORY[:] = _trim_history(_HISTORY)
 
+
+
 # --- MoM model (your code can remain) ---
 mom_model = genai.GenerativeModel(
     model_name=MODEL_NAME,
     system_instruction="""You are an expert executive assistant.
-Your task is to summarize sales calls into structured Minutes of Meeting (MoM) documents."""
+Your task is to summarize calls into structured Minutes of Meeting (MoM) documents."""
 )
 
 async def generate_mom(transcript: List[Dict]) -> str:
@@ -169,31 +174,51 @@ async def generate_mom(transcript: List[Dict]) -> str:
         role = "Agent (Sarah)" if entry["speaker"] == "agent" else "Customer"
         conversation_text += f"{role}: {entry['text']}\n"
 
-    prompt = f"""
-Based on the following conversation transcript, create a structured Minutes of Meeting (MoM) document.
+    prompt = f"""INTELLIGENT CONVERSATION ANALYZER
+
+Your task: Extract EVERY IMPORTANT FACT from this conversation into a structured summary.
+
+MANDATORY EXTRACTION (find ALL):
+✅ NAMES (people, companies, brands)
+✅ NUMBERS (money, quantities, percentages, scores)
+✅ CONTACTS (phone, email, addresses, social)
+✅ DATES/TIMES (days, months, years, deadlines, events)
+✅ LOCATIONS (cities, addresses, venues, online links)
+✅ AGREEMENTS (deals, promises, next steps)
+✅ ITEMS (products, services, topics discussed)
+✅ QUANTITIES (sizes, weights, amounts, durations)
 
 TRANSCRIPT:
 {conversation_text}
 
-OUTPUT FORMAT (Markdown):
-# Minutes of Meeting - Barbie Builders
+COMPLETE THIS TEMPLATE EXACTLY:
 
-## 1. Call Summary
-(A brief 2-3 sentence summary of the call)
+# 📋 Conversation Intelligence Report
 
-## 2. Customer Details
-- **Intent:** (Buying/Selling/Inquiry)
-- **Key Interests:** (Location, Budget, Type)
+## 🎯 SUMMARY
+[2-3 sentences capturing purpose, outcome, key takeaway]
 
-## 3. Key Discussion Points
-- (Bulleted list of main topics discussed)
+## 📊 EXTRACTED FACTS
+**People/Names:** [list all]
+**Contacts:** [phones/emails/handles]
+**Numbers:** [₹5L, 3days, 80%, 500units → format clearly]
+**Dates/Times:** [15th March, EOD Friday, Q2 2026]
+**Locations:** [Delhi, Zoom link, Office #204]
+**Deals/Decisions:** [what was agreed]
 
-## 4. Action Items / Next Steps
-- (What needs to be done next)
+## ✅ ACTIONS
+- [WHO does WHAT by WHEN]
+- [repeat for all commitments]
 
-## 5. Sentiment Analysis
-(Positive/Neutral/Negative)
-"""
+## 📈 INSIGHTS
+- Main topic:
+- Sentiment: [Positive/Negative/Neutral/Tense/Excited]
+- Urgency: [High/Medium/Low]
+- Confidence: [High/Medium/Low]
+---
+
+CRITICAL: If something wasn't mentioned, Ignore that field rather than writing on your own"""
+
     try:
         response = await asyncio.to_thread(
             mom_model.generate_content,
