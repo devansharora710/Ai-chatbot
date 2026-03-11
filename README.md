@@ -55,13 +55,17 @@ Clone the repository and install dependencies:
 ```bash
 git clone https://github.com/devansharora710/Ai-chatbot
 cd Ai-chatbot
-pip install -r requirements.txt
-```
-It is recommednded to run it inside a virtual environment
-```bash
-
 python3 -m venv venv
 source venv/bin/activate
+pip install -r requirements.txt
+mkdir Recordings
+```
+
+Running the program
+```bash
+cd src
+python ari.py
+<select mode>
 ```
 
 
