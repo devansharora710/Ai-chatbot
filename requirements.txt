@@ -5,14 +5,20 @@ numpy
 scipy
 torch
 
-# TTS
-piper-tts
-
 # LLM + env
 google-generativeai
 python-dotenv
+
+# TTS
+piper-tts
 
 # ARI controller + PDF
 requests
 websockets
 weasyprint
+
+#MOM generator
+sarvamai
+
+#PDF generator
+markdown
