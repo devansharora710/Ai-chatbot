@@ -30,7 +30,7 @@ async def sarvam_generate_mom():
     """Transcribe all audio files in Recordings folder + Generate MOM PDFs"""
     
     # Find all audio files
-    audio_extensions = ['*.mp3', '*.wav']
+    audio_extensions = ['*.mpeg','*.mp3', '*.wav' ,'*.aac' ] #['*.mp3', '*.wav', '*.aac', '*.opus', '*.flac']
     audio_files = []
     for ext in audio_extensions:
         audio_files.extend(RECORDINGS_DIR.glob(ext))
@@ -106,13 +106,13 @@ async def sarvam_generate_mom():
         
         # Named PDF per file
         # timestamp = time.strftime("%Y%m%d_%H%M%S")
-        pdf_filename = str(BASE_DIR / f"MoM for {filename}.pdf")
+        pdf_filename = str(BASE_DIR /"MoM" / f"MoM for {filename}.pdf")
         
         await save_mom_as_pdf(mom_content, pdf_filename, caller_id=filename)
         
         print(f"✅MoM saved to: {pdf_filename}")
 
-    shutil.rmtree(output_dir) # to delete json files
+    shutil.rmtree(output_dir) # delete json files created by json files
     print("DONE")    
 
 if __name__ == "__main__":
